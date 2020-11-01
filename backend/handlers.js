@@ -6,15 +6,79 @@ const { v4: uuidv4 } = require("uuid");
 //  Use this data. Changes will persist until the server (backend) restarts.
 const { flights, reservations } = require("./data");
 
-const getFlights = (req, res) => {};
+const getFlights = (req, res) => {
+  const allFlights = Object.keys(flights)
+  res.status(200).json({
+    status: 200,
+    data: allFlights,
+  });
+};
 
-const getFlight = (req, res) => {};
+const getFlight = (req, res) => {
+  const { flightId } = req.params;
+  const flightDetails = flights[flightId];
+  if (flightDetails) {
+    res.status(200).json({
+      status: 200,
+      data: flightDetails,
+    });
+    
+  } else {
+    res.status(404).json({
+      status: 404,
+      message: `Flight ${flightId} does not exist`
+    });
+  }
+};
 
-const addReservations = (req, res) => {};
+const addReservations = (req, res) => {
+  const {
+    id,
+    flight,
+    seat,
+    givenName,
+    surname,
+    email
+  } = req.body
 
-const getReservations = (req, res) => {};
+  if (flight === undefined || seat === undefined || givenName === undefined || surname === undefined || email === undefined) 
+  {
+    res.status(404).json({
+      status: 404,
+      message: "Missing information - reservation was not processed"
+    });
+  }
+  else {
+    req.body.id === uuidv4()
+    reservations.push(req.body)
+    res.status(200).json({
+      status: 200,
+      message: `Success! Reservation number: ${req.body.id}`
+  })
+}};
 
-const getSingleReservation = (req, res) => {};
+const getReservations = (req, res) => {  
+res.status(200).json({
+  status: 200,
+  data: reservations,
+});
+};
+
+const getSingleReservation = (req, res) => {
+  const isReservation = reservations.filter(reservation => reservation.id.includes(`${req.params.id}`))
+      if (isReservation.length > 0) {
+        res.status(200).json({
+          status: 200,
+          data: isReservation
+        }) 
+      }
+      else {
+        res.status(404).json({
+          status: 404,
+          message: `Reservation ${req.params.id} not found`
+        }) 
+      }
+};
 
 const deleteReservation = (req, res) => {};
 
@@ -28,4 +92,4 @@ module.exports = {
   getSingleReservation,
   deleteReservation,
   updateReservation,
-};
+}
