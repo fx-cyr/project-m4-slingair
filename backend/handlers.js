@@ -41,19 +41,23 @@ const addReservations = (req, res) => {
     email
   } = req.body
 
+
   if (flight === undefined || seat === undefined || givenName === undefined || surname === undefined || email === undefined) 
   {
-    res.status(404).json({
-      status: 404,
+    res.status(400).json({
+      status: 400,
+      data: req.body,
       message: "Missing information - reservation was not processed"
     });
   }
   else {
-    req.body.id === uuidv4()
-    reservations.push(req.body)
-    res.status(200).json({
-      status: 200,
-      message: `Success! Reservation number: ${req.body.id}`
+    let data = req.body
+    data.id = uuidv4()
+    reservations.push(data.flight)
+    res.status(201).json({
+      status: 201,
+      data: data,
+    message: `Success! Reservation number: ${data.id} `
   })
 }};
 

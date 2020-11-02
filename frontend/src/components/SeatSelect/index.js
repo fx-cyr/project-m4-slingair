@@ -22,6 +22,7 @@ const SeatSelect = ({ updateUserReservation }) => {
 
   const handleFlightSelect = (ev) => {
     setFlightNumber(ev.target.value);
+    setFormData({ ...formData, flight: ev.target.value });
   };
 
   const handleSeatSelect = (seatId) => {
@@ -44,10 +45,27 @@ const SeatSelect = ({ updateUserReservation }) => {
   const handleSubmit = (ev) => {
     ev.preventDefault();
     if (validateEmail()) {
-      // TODO: Send data to the server for validation/submission
-      // TODO: if 201, add reservation id (received from server) to localStorage
-      // TODO: if 201, redirect to /confirmed (push)
-      // TODO: if error from server, show error to user (stretch goal)
+      fetch(`/reservation`, {
+        method: "post",
+        body: JSON.stringify(formData),
+        headers: {"Accept":"application/json", "Content-Type":"application/json"}
+      })
+    
+      .then((res)=> {
+return res.json()
+      })
+      .then((json) => {
+        console.log(json)
+        if(json.status === 201) {
+          localStorage.setItem("flightNumber", flightNumber)
+          localStorage.setItem("seat", `${json.data.seat}` )
+          localStorage.setItem("givenName", `${json.data.givenName}`)
+          localStorage.setItem("surname", `${json.data.surname}`)
+          localStorage.setItem("email", `${json.data.email}`)
+          localStorage.setItem("id", `${json.data.id}`)
+          history.push("/confirmed")
+        }
+      })
     }
   };
 

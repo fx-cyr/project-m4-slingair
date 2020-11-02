@@ -9,11 +9,14 @@ const FlightSelect = ({ handleFlightSelect }) => {
 
   useEffect(() => {
     fetch("/flights")
-      .then((res) => 
-       res.json()
+      .then((res) => {
+        return res.json()
+      }
+       
       )
-      .then((data) => 
-       setFlights(data)
+      .then((data) => {
+        return setFlights(data)
+      }
       );
   }, []);
   
@@ -29,7 +32,7 @@ const FlightSelect = ({ handleFlightSelect }) => {
       id="dropdown"
       name="dropdown"
       placeholder="Select a flight"
-      onClick={handleFlightSelect}
+      onChange={handleFlightSelect}
     >
       <option value ="placeholder" selected disabled>Select a flight</option>
       {allFlights && allFlights.map((flight)=> {
