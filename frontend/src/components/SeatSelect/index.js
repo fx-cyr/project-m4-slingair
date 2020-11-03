@@ -57,6 +57,7 @@ return res.json()
       .then((json) => {
         console.log(json)
         if(json.status === 201) {
+          setSubStatus("confirmed")
           localStorage.setItem("flightNumber", flightNumber)
           localStorage.setItem("seat", `${json.data.seat}` )
           localStorage.setItem("givenName", `${json.data.givenName}`)

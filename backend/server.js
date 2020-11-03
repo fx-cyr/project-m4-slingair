@@ -39,8 +39,11 @@ express()
    // endpoint that creates a reservation 👇
   .post("/reservation", addReservations)
 
-   // endpoint that deletes a reservation (This is a requirement, even though the FE of this is a stretch goal.)
-   // endpoint that updates a reservation (This is a requirement, even though the FE of this is a stretch goal.)
+   // endpoint that deletes a reservation 👇
+   .delete("/reservation/:id", deleteReservation)
+
+   // endpoint that updates a reservation 👇
+   .patch("/reservation/:id", updateReservation)
   // get flights (flight numbers)
 
   // add new endpoints here ☝️

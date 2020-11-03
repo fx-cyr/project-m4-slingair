@@ -53,7 +53,7 @@ const addReservations = (req, res) => {
   else {
     let data = req.body
     data.id = uuidv4()
-    reservations.push(data.flight)
+    reservations.push(data)
     res.status(201).json({
       status: 201,
       data: data,
@@ -73,6 +73,7 @@ const getSingleReservation = (req, res) => {
       if (isReservation.length > 0) {
         res.status(200).json({
           status: 200,
+          message: "Single reservation requested",
           data: isReservation
         }) 
       }
@@ -84,9 +85,42 @@ const getSingleReservation = (req, res) => {
       }
 };
 
-const deleteReservation = (req, res) => {};
+const deleteReservation = (req, res) => {
+  const id = req.params.id
+  const updatedResArr = reservations.filter((reservation) => {
+    return reservation.id !== id
+  })
+  if(updatedResArr.length < reservations.length) {
+    res.status(200).json({
+      status: 200,
+      message: `Reservation ${id} succesfully deleted.`,
+  })
+}
 
-const updateReservation = (req, res) => {};
+else {
+  res.status(404).json({
+    status: 404,
+    message: `Reservation ${req.params.id} not found`
+})
+}
+}
+
+const updateReservation = (req, res) => {
+  const id = req.params.id
+  let updatedRes = reservations.find((singleRes) => singleRes.id === id);
+  if (updatedRes) {
+    updatedRes = {...req.body};
+    res.status(200).json({
+      status: 200,
+      message: `Reservation ${id} succesfully updated`,
+    });
+  } else {
+    res.status(404).json({
+      status: 404,
+      message: "Reservation not found",
+    });
+  }
+};
 
 module.exports = {
   getFlights,
